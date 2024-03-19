@@ -17,17 +17,17 @@ model account {
 }
 
 model item {
-  id                Int                  @id @default(autoincrement())
-  itemgroupid       Int
-  unitofmeasurement unit_of_measuarement @default(pcs)
-  quantity          Decimal              @db.Decimal(10, 2)
-  price             Decimal              @db.Decimal(10, 2)
-  status            String               @db.VarChar(255)
-  storagelocation   String?
-  contactperson     String?
-  photo             String?
-  item_group        item_group           @relation(fields: [itemgroupid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  request           request[]
+  id                  Int                 @id @default(autoincrement())
+  item_group_id       Int
+  unit_of_measurement unit_of_measurement @default(pcs)
+  quantity            Decimal             @db.Decimal(10, 2)
+  price               Decimal             @db.Decimal(10, 2)
+  status              String              @db.VarChar(255)
+  storage_location    String?
+  contact_person      String?
+  photo               String?
+  item_group          item_group          @relation(fields: [item_group_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  request             request[]
 }
 
 model item_group {
@@ -37,16 +37,16 @@ model item_group {
 }
 
 model request {
-  id                Int                  @id @default(autoincrement())
-  employeeid        Int
-  itemid            Int
-  unitofmeasurement unit_of_measuarement @default(pcs)
-  quantity          Decimal              @db.Decimal
-  price             Decimal              @db.Decimal(10, 2)
-  comment           String?
-  status            request_status?      @default(NEW)
-  account           account              @relation(fields: [employeeid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  item              item                 @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                  Int                 @id @default(autoincrement())
+  employee_id         Int
+  item_id             Int
+  unit_of_measurement unit_of_measurement @default(pcs)
+  quantity            Decimal             @db.Decimal
+  price               Decimal             @db.Decimal(10, 2)
+  comment             String?
+  status              request_status?     @default(NEW)
+  account             account             @relation(fields: [employee_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  item                item                @relation(fields: [item_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum request_status {
@@ -61,7 +61,7 @@ enum role {
   EMPLOYEE
 }
 
-enum unit_of_measuarement {
+enum unit_of_measurement {
   pcs
   box
   liter

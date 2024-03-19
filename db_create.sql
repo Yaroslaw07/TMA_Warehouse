@@ -3,17 +3,17 @@ CREATE TABLE item_group (
   name VARCHAR(255) UNIQUE CONSTRAINT unique_item_group_name NOT NULL 
 );
 
-CREATE TYPE UNIT_OF_MEASUAREMENT AS ENUM ('pcs','box','liter','kg');
+CREATE TYPE UNIT_OF_MEASUREMENT AS ENUM ('pcs','box','liter','kg');
 
 CREATE TABLE item (
   id SERIAL PRIMARY KEY,
-  itemGroupId INT REFERENCES item_group(id) CONSTRAINT fk_item_group NOT NULL,
-  unitOfMeasurement UNIT_OF_MEASUAREMENT DEFAULT 'pcs' NOT NULL,
+  item_group_id INT REFERENCES item_group(id) CONSTRAINT fk_item_group NOT NULL,
+  unit_of_measurement UNIT_OF_MEASUREMENT DEFAULT 'pcs' NOT NULL,
   quantity DECIMAL(10,2) NOT NULL,
   price DECIMAL(10,2) NOT NULL,
   status VARCHAR(255) NOT NULL,
-  storageLocation TEXT, 
-  contactPerson TEXT,
+  storage_location TEXT, 
+  contact_person TEXT,
   photo TEXT 
 );
 
@@ -30,11 +30,11 @@ CREATE TABLE account (
 CREATE TYPE REQUEST_STATUS AS ENUM ('NEW', 'APPROVED', 'REJECTED');
 
 CREATE TABLE request (
-  id SERIAL PRIMARY KEY, 
-  employeeId INTEGER REFERENCES account(id) CONSTRAINT fk_request_employee NOT NULL, 
-  itemId INTEGER REFERENCES item(id) CONSTRAINT fk_request_item NOT NULL,
+  id SERIAL PRIMARY KEY,
+  employee_id INTEGER REFERENCES account(id) CONSTRAINT fk_request_employee NOT NULL , 
+  item_id INTEGER REFERENCES item(id) CONSTRAINT fk_request_item NOT NULL,
 
-  unitOfMeasurement UNIT_OF_MEASUAREMENT DEFAULT 'pcs' NOT NULL,
+  unit_of_measurement UNIT_OF_MEASUREMENT DEFAULT 'pcs' NOT NULL,
   quantity DECIMAL NOT NULL,
   price DECIMAL(10,2) NOT NULL,
   comment TEXT,
