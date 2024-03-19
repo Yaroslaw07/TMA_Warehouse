@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model account {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  name     String?
+  role     role      @default(EMPLOYEE)
+  request  request[]
+}
+
+model item {
+  id                Int                  @id @default(autoincrement())
+  itemgroupid       Int
+  unitofmeasurement unit_of_measuarement @default(pcs)
+  quantity          Decimal              @db.Decimal(10, 2)
+  price             Decimal              @db.Decimal(10, 2)
+  status            String               @db.VarChar(255)
+  storagelocation   String?
+  contactperson     String?
+  photo             String?
+  item_group        item_group           @relation(fields: [itemgroupid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  request           request[]
+}
+
+model item_group {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+  item item[]
+}
+
+model request {
+  id                Int                  @id @default(autoincrement())
+  employeeid        Int
+  itemid            Int
+  unitofmeasurement unit_of_measuarement @default(pcs)
+  quantity          Decimal              @db.Decimal
+  price             Decimal              @db.Decimal(10, 2)
+  comment           String?
+  status            request_status?      @default(NEW)
+  account           account              @relation(fields: [employeeid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  item              item                 @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum request_status {
+  NEW
+  APPROVED
+  REJECTED
+}
+
+enum role {
+  ADMIN
+  COORDINATOR
+  EMPLOYEE
+}
+
+enum unit_of_measuarement {
+  pcs
+  box
+  liter
+  kg
+}
