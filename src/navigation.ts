@@ -1,6 +1,6 @@
 const navigation = {
   name: "Resources",
-  icon: "Navigation",
+  icon: false,
 };
 
 export { navigation };

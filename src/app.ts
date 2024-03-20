@@ -7,8 +7,13 @@ import {
   itemGroupResource,
 } from "./resources/items.resource.js";
 import { requestResource } from "./resources/requests.resource.js";
+import { AccountResource } from "./resources/account.resource.js";
+import { authenticate } from "./utils/auth.js";
+import dotenv from "dotenv";
+import { createFirstAccount } from "./utils/firstAccount.js";
 
-const PORT = 3000;
+dotenv.config();
+const PORT = process.env.PORT || 3000;
 
 AdminJS.registerAdapter({ Database, Resource });
 
@@ -16,15 +21,35 @@ const start = async () => {
   const app = express();
 
   const admin = new AdminJS({
-    resources: [itemsResource, itemGroupResource, requestResource],
-    branding: { companyName: "Warehouse" },
+    resources: [
+      itemsResource,
+      itemGroupResource,
+      AccountResource,
+      requestResource,
+    ],
+    branding: {
+      companyName: "Warehouse",
+      withMadeWithLove: false,
+    },
   });
 
-  admin.watch();
+  const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
+    admin,
+    {
+      authenticate,
+      cookiePassword: process.env.COOKIE_SECRET!,
+    },
+    null,
+    {
+      resave: false,
+      saveUninitialized: true,
+      secret: process.env.SESSION_SECRET!,
+    }
+  );
 
-  const adminRouter = AdminJSExpress.buildRouter(admin);
   app.use(admin.options.rootPath, adminRouter);
 
+  await createFirstAccount();
   app.listen(PORT, () => {
     console.log(
       `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
