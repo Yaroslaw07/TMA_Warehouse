@@ -2,15 +2,13 @@ import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import express from "express";
 import { Database, Resource } from "@adminjs/prisma";
-import {
-  itemsResource,
-  itemGroupResource,
-} from "./resources/items.resource.js";
+import { itemsResource } from "./resources/items.resource.js";
 import { requestResource } from "./resources/requests.resource.js";
 import { AccountResource } from "./resources/account.resource.js";
 import { authenticate } from "./utils/auth.js";
 import dotenv from "dotenv";
 import { createFirstAccount } from "./utils/firstAccount.js";
+import { itemGroupResource } from "./resources/items_group.resource.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +28,7 @@ const start = async () => {
     branding: {
       companyName: "Warehouse",
       withMadeWithLove: false,
+      logo: false,
     },
   });
 

@@ -1,14 +1,16 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, role } from "@prisma/client";
 import { getModelByName } from "@adminjs/prisma";
-import { navigation } from "../navigation.js";
 import bcrypt from "bcrypt";
+import { isRoleAccessible } from "../utils/roles.js";
+import { RequestContext } from "../types.js";
 
 const prisma = new PrismaClient();
 
 const accountResource = {
   resource: { model: getModelByName("account"), client: prisma },
   options: {
-    navigation: navigation,
+    navigation: null,
+
     properties: {
       password: {
         isVisible: {
@@ -24,7 +26,19 @@ const accountResource = {
       },
     },
     actions: {
+      list: {
+        isAccessible: (context: RequestContext) =>
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
+      },
+
+      search: {
+        isAccessible: (context: RequestContext) =>
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
+      },
+
       new: {
+        isAccessible: (context: RequestContext) =>
+          isRoleAccessible(context, [role.ADMIN]),
         before: async (request: any) => {
           if (request.payload.password) {
             request.payload.password = await bcrypt.hash(
@@ -32,9 +46,37 @@ const accountResource = {
               10
             );
           }
-          console.log(request.payload);
           return request;
         },
+      },
+
+      show: {
+        isAccessible: (context: RequestContext) =>
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
+      },
+
+      edit: {
+        isAccessible: (context: RequestContext) =>
+          isRoleAccessible(context, [role.ADMIN]),
+        before: async (request: any) => {
+          if (request.payload.password) {
+            request.payload.password = await bcrypt.hash(
+              request.payload.password,
+              10
+            );
+          }
+          return request;
+        },
+      },
+
+      delete: {
+        isAccessible: (context: RequestContext) =>
+          isRoleAccessible(context, [role.ADMIN]),
+      },
+
+      bulkDelete: {
+        isAccessible: (context: RequestContext) =>
+          isRoleAccessible(context, [role.ADMIN]),
       },
     },
   },
