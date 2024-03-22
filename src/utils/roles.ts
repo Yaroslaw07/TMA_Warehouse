@@ -1,7 +1,7 @@
 import { role } from "@prisma/client";
-import { RequestContext } from "../types.js";
+import { Context } from "../types.js";
 
-const isRoleAccessible = (context: RequestContext, roles: role[]) => {
+const isRoleAccessible = (context: Context, roles: role[]) => {
   return roles.includes(context.currentAdmin.role);
 };
 

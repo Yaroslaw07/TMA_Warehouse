@@ -1,8 +1,8 @@
 import { getModelByName } from "@adminjs/prisma";
-import { db } from "../utils/db.js";
-import { RequestContext } from "../types.js";
-import { isRoleAccessible } from "../utils/roles.js";
+import { db } from "../../db.js";
+import { isRoleAccessible } from "../../utils/roles.js";
 import { role } from "@prisma/client";
+import { Context } from "../../types.js";
 
 const itemGroupResource = {
   resource: { model: getModelByName("item_group"), client: db },
@@ -15,33 +15,33 @@ const itemGroupResource = {
     },
     actions: {
       list: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
       search: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
       new: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
 
       show: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
       edit: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
       delete: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
 
       bulkDelete: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
     },

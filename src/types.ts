@@ -1,7 +1,8 @@
 import { account } from "@prisma/client";
 
-type RequestContext = {
+type Context = {
   currentAdmin: account;
+  record: any;
 };
 
-export { RequestContext };
+export { Context };

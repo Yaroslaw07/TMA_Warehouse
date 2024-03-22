@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { db } from "./db.js";
+import { db } from "../db.js";
 
 const hashPassword = async (password: string) => {
   const hashedPassword = await bcrypt.hash(password, 10);

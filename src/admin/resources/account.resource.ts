@@ -1,8 +1,8 @@
 import { PrismaClient, role } from "@prisma/client";
 import { getModelByName } from "@adminjs/prisma";
 import bcrypt from "bcrypt";
-import { isRoleAccessible } from "../utils/roles.js";
-import { RequestContext } from "../types.js";
+import { isRoleAccessible } from "../../utils/roles.js";
+import { Context } from "../../types.js";
 
 const prisma = new PrismaClient();
 
@@ -27,17 +27,17 @@ const accountResource = {
     },
     actions: {
       list: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
       },
 
       search: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
       },
 
       new: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
         before: async (request: any) => {
           if (request.payload.password) {
@@ -51,12 +51,12 @@ const accountResource = {
       },
 
       show: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
       },
 
       edit: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
         before: async (request: any) => {
           if (request.payload.password) {
@@ -70,12 +70,12 @@ const accountResource = {
       },
 
       delete: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
 
       bulkDelete: {
-        isAccessible: (context: RequestContext) =>
+        isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.ADMIN]),
       },
     },

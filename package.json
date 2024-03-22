@@ -5,7 +5,7 @@
   "author": "Yaroslav Ustinov <y.ustinov2004@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "tsx src/app.ts"
+    "dev": "ts-node ./src/app"
   },
   "type": "module",
   "dependencies": {
@@ -29,8 +29,6 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.28",
-    "concurrently": "^8.2.2",
-    "nodemon": "^3.1.0",
     "ts-node": "^10.9.2"
   }
 }
