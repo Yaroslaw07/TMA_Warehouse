@@ -2,14 +2,14 @@
   "compilerOptions": {
     "incremental": true,
 
-    "target": "es2017",
+    "target": "ES2021",
     "jsx": "react",
 
     "sourceMap": true,
-    "outDir": "dist",
-    "rootDir": "src",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom", "DOM.Iterable"],
     "esModuleInterop": true,
 
     "jsxFactory": "",
@@ -21,12 +21,12 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
 
-    "allowJs": true
+    "allowJs": true,
+    "resolveJsonModule": true
   },
 
   "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
+    "esm": true
   },
 
   "exclude": ["node_modules"],

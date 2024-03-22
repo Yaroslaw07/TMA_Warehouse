@@ -5,6 +5,7 @@ import { itemGroupResource } from "./resources/items_group.resource.js";
 import { AccountResource } from "./resources/account.resource.js";
 import { requestResource } from "./resources/requests.resource.js";
 import { componentLoader } from "./componentLoader.js";
+import { locale } from "./locale/index.js";
 
 AdminJS.registerAdapter({ Database, Resource });
 
@@ -16,6 +17,7 @@ const admin = new AdminJS({
     AccountResource,
     requestResource,
   ],
+  locale,
   branding: {
     companyName: "Warehouse",
     withMadeWithLove: false,

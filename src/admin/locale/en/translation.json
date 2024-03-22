@@ -1,0 +1,13 @@
+{
+  "components": {
+    "Login": {
+      "welcomeHeader": "Welcome",
+      "welcomeMessage": "to AdminJS - the world's leading open-source auto-generated admin panel for your Node.js application that allows you to manage all your data in one place",
+      "properties": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "loginButton": "Login"
+    }
+  }
+}

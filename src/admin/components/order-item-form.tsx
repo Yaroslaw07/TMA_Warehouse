@@ -5,36 +5,78 @@ import {
   Input,
   Header,
   Select,
-  MessageBox,
+  Button,
 } from "@adminjs/design-system";
-import React, { useState } from "react";
-import { BasePropertyProps } from "adminjs";
-import { request_status, unit_of_measurement } from "@prisma/client";
+import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { BasePropertyProps, useNotice } from "adminjs";
+import { unit_of_measurement } from "@prisma/client";
 
 const OrderItemForm = ({ record }: BasePropertyProps) => {
+  const navigate = useNavigate();
+  const addNotice = useNotice();
+
   const [unitOfMeasurement, setUnitOfMeasurement] =
-    useState<unit_of_measurement>(
-      record?.params.unit_of_measurement as unit_of_measurement
-    );
+    useState<unit_of_measurement>();
+
+  const quantityRef = useRef<HTMLInputElement>(null);
+  const priceRef = useRef<HTMLInputElement>(null);
+  const commentRef = useRef<HTMLTextAreaElement>(null);
 
   const unitsArray = Object.keys(unit_of_measurement).map((key) => {
     return { value: key, label: key };
   });
+
+  useEffect(() => {
+    setUnitOfMeasurement(
+      record?.params.unit_of_measurement as unit_of_measurement
+    );
+  }, [record]);
+
+  const handleCancel = () => {
+    navigate(-1);
+  };
+
+  const handleSubmit = () => {
+    const quantity = quantityRef.current?.value;
+    const price = priceRef.current?.value;
+    const comment = commentRef.current?.value;
+
+    const item = {
+      quantity: quantity ? parseFloat(quantity) : undefined,
+      price: price ? parseFloat(price) : undefined,
+      comment,
+      unit_of_measurement: unitOfMeasurement,
+    };
+
+    if (!item.quantity && !item.price) {
+      addNotice({
+        message: "Quantity and price must be filled",
+        type: "error",
+      });
+      return;
+    }
+
+    console.log(item);
+  };
 
   return (
     <Box variant="white" boxShadow="card">
       <Header>Add item to requests</Header>
       <FormGroup
         style={{ display: "flex", flexDirection: "column", gap: "24px" }}
+        id="form"
       >
         <Box>
           <Label required htmlFor="unit_of_measurement">
             Unit Of Measurement
           </Label>
           <Select
-            value={unitOfMeasurement}
+            value={{ value: unitOfMeasurement, label: unitOfMeasurement }}
             id="unit_of_measurement"
-            onChange={(selected) => setUnitOfMeasurement(selected)}
+            onChange={(selected) =>
+              setUnitOfMeasurement(selected.value as unit_of_measurement)
+            }
             options={unitsArray}
           ></Select>
         </Box>
@@ -43,19 +85,28 @@ const OrderItemForm = ({ record }: BasePropertyProps) => {
           <Label required htmlFor="quantity">
             Quantity
           </Label>
-          <Input type="number" id="quantity"></Input>
+          <Input type="number" id="quantity" ref={quantityRef}></Input>
         </Box>
 
         <Box>
           <Label required htmlFor="price">
             Price
           </Label>
-          <Input type="number" id="price"></Input>
+          <Input type="number" id="price" ref={priceRef}></Input>
         </Box>
 
         <Box>
           <Label htmlFor="comment">Comment</Label>
-          <textarea id="comment"></textarea>
+          <textarea id="comment" ref={commentRef}></textarea>
+        </Box>
+
+        <Box>
+          <Button onClick={handleSubmit} variant="primary">
+            Add item
+          </Button>
+          <Button variant="text" onClick={handleCancel}>
+            Cancel
+          </Button>
         </Box>
       </FormGroup>
     </Box>

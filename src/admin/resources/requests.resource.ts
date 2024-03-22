@@ -59,7 +59,9 @@ const requestResource = {
       },
 
       new: {
-        isAccessible: false,
+        isAccessible: (context: Context) =>
+          isRoleAccessible(context, [role.EMPLOYEE]),
+        isVisible: false,
       },
     },
   },
