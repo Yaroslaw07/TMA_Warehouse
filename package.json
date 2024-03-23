@@ -5,7 +5,9 @@
   "author": "Yaroslav Ustinov <y.ustinov2004@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/app.ts"
+    "build": "tsc",
+    "start": "node src/app.js",
+    "dev": "ts-node src/app.ts"
   },
   "type": "module",
   "dependencies": {

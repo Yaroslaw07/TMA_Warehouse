@@ -5,10 +5,7 @@ import { db } from "../../db.js";
 import { Context } from "../../types.js";
 import { Request } from "express";
 
-const beforeResourceActionCurrentUser = (
-  request: Request,
-  context: Context
-) => {
+const beforeEmployeeFilter = (request: Request, context: Context) => {
   const { query = {} } = request;
   const { currentAdmin } = context;
 
@@ -44,7 +41,7 @@ const requestResource = {
             return request;
           }
 
-          return beforeResourceActionCurrentUser(request, context);
+          return beforeEmployeeFilter(request, context);
         },
       },
 
@@ -54,7 +51,7 @@ const requestResource = {
             return request;
           }
 
-          return beforeResourceActionCurrentUser(request, context);
+          return beforeEmployeeFilter(request, context);
         },
       },
 
@@ -62,6 +59,61 @@ const requestResource = {
         isAccessible: (context: Context) =>
           isRoleAccessible(context, [role.EMPLOYEE]),
         isVisible: false,
+
+        before: (request: any, context: Context) => {
+          const { currentAdmin } = context;
+
+          request.payload.account = { connect: { id: currentAdmin.id } };
+          request.payload.item = { connect: { id: request.payload.itemId } };
+
+          delete request.payload.itemId;
+
+          return request;
+        },
+
+        // prisma adapter does not support nested create
+        // so we have to create custom handler
+        async handler(request: any, response: any, context: any) {
+          const result = await db.request.create({ data: request.payload });
+
+          if (result) {
+            return { record: result };
+          } else {
+            return response.badRequest({ record: result });
+          }
+        },
+      },
+
+      show: {
+        before: (request: Request, context: Context) => {
+          if (isRoleAccessible(context, [role.ADMIN, role.COORDINATOR])) {
+            return request;
+          }
+
+          const { currentAdmin } = context;
+          return beforeEmployeeFilter(request, context);
+        },
+        isAccessible: (context: Context) =>
+          isRoleAccessible(context, [
+            role.ADMIN,
+            role.COORDINATOR,
+            role.EMPLOYEE,
+          ]),
+      },
+
+      edit: {
+        isAccessible: (context: Context) =>
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
+      },
+
+      delete: {
+        isAccessible: (context: Context) =>
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
+      },
+
+      bulkDelete: {
+        isAccessible: (context: Context) =>
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
       },
     },
   },
