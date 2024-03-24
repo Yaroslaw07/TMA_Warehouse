@@ -7,12 +7,8 @@ import { Context } from "../../types.js";
 const itemGroupResource = {
   resource: { model: getModelByName("item_group"), client: db },
   options: {
+    listProperties: ["id", "name"],
     navigation: null,
-    properties: {
-      id: {
-        isVisible: { list: false, show: false, edit: false, filter: true },
-      },
-    },
     actions: {
       list: {
         isAccessible: (context: Context) =>

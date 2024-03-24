@@ -24,13 +24,23 @@ const beforeEmployeeFilter = (request: Request, context: Context) => {
 const requestResource = {
   resource: { model: getModelByName("request"), client: db },
   options: {
+    listProperties: [
+      "id",
+      "account",
+      "item",
+      "unit_of_measurement",
+      "quantity",
+      "price",
+      "comment",
+      "status",
+    ],
     parent: {
       icon: "Request",
     },
     navigation: null,
     properties: {
-      id: {
-        isVisible: { list: false, show: true, edit: false, filter: true },
+      comment: {
+        type: "textarea",
       },
     },
 
@@ -71,7 +81,7 @@ const requestResource = {
           return request;
         },
 
-        // prisma adapter does not support nested create
+        // prisma adapter does not support create with relations
         // so we have to create custom handler
         async handler(request: any, response: any, context: any) {
           const result = await db.request.create({ data: request.payload });

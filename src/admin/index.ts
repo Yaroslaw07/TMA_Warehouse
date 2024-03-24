@@ -17,6 +17,7 @@ const admin = new AdminJS({
     AccountResource,
     requestResource,
   ],
+
   locale,
   branding: {
     companyName: "Warehouse",

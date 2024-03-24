@@ -6,6 +6,7 @@ import {
   Header,
   Select,
   Button,
+  TextArea,
 } from "@adminjs/design-system";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useRef, useEffect } from "react";
@@ -95,11 +96,8 @@ const OrderItemForm = ({ record }: BasePropertyProps) => {
   return (
     <Box variant="white" boxShadow="card">
       <Header>Order item</Header>
-      <FormGroup
-        style={{ display: "flex", flexDirection: "column", gap: "24px" }}
-        id="form"
-      >
-        <Box>
+      <Box style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+        <FormGroup>
           <Label required htmlFor="unit_of_measurement">
             Unit Of Measurement
           </Label>
@@ -111,26 +109,36 @@ const OrderItemForm = ({ record }: BasePropertyProps) => {
             }
             options={unitsArray}
           ></Select>
-        </Box>
+        </FormGroup>
 
-        <Box>
+        <FormGroup>
           <Label required htmlFor="quantity">
             Quantity
           </Label>
-          <Input type="number" id="quantity" ref={quantityRef}></Input>
-        </Box>
+          <Input
+            type="number"
+            id="quantity"
+            defaultValue={1}
+            ref={quantityRef}
+          ></Input>
+        </FormGroup>
 
-        <Box>
+        <FormGroup>
           <Label required htmlFor="price">
             Price
           </Label>
-          <Input type="number" id="price" ref={priceRef}></Input>
-        </Box>
+          <Input
+            type="number"
+            id="price"
+            defaultValue={record?.params.price}
+            ref={priceRef}
+          ></Input>
+        </FormGroup>
 
-        <Box>
+        <FormGroup>
           <Label htmlFor="comment">Comment</Label>
-          <textarea id="comment" ref={commentRef}></textarea>
-        </Box>
+          <TextArea id="comment" ref={commentRef}></TextArea>
+        </FormGroup>
 
         <Box>
           <Button onClick={handleSubmit} variant="primary">
@@ -140,7 +148,7 @@ const OrderItemForm = ({ record }: BasePropertyProps) => {
             Cancel
           </Button>
         </Box>
-      </FormGroup>
+      </Box>
     </Box>
   );
 };

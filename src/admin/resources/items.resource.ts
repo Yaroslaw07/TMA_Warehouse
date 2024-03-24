@@ -9,39 +9,42 @@ const itemsResource = {
   resource: { model: getModelByName("item"), client: db },
   options: {
     navigation: null,
+    listProperties: [
+      "id",
+      "item_group",
+      "unit_of_measurement",
+      "quantity",
+      "price",
+      "status",
+      "storage_location",
+      "contact_person",
+      "photo",
+    ],
     parent: {
       name: "item_group",
       field: "itemGroupId",
       displayField: "GroupName",
     },
-    properties: {
-      id: {
-        isVisible: { list: false, show: false, edit: false, filter: false },
-      },
-      photo: {
-        isVisible: { list: true, show: true, edit: true, filter: false },
-      },
-    },
 
     actions: {
       new: {
         isAccessible: (context: Context) =>
-          isRoleAccessible(context, [role.ADMIN]),
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
       },
 
       edit: {
         isAccessible: (context: Context) =>
-          isRoleAccessible(context, [role.ADMIN]),
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
       },
 
       delete: {
         isAccessible: (context: Context) =>
-          isRoleAccessible(context, [role.ADMIN]),
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
       },
 
       bulkDelete: {
         isAccessible: (context: Context) =>
-          isRoleAccessible(context, [role.ADMIN]),
+          isRoleAccessible(context, [role.ADMIN, role.COORDINATOR]),
       },
 
       order: {
