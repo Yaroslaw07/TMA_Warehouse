@@ -28,7 +28,6 @@ const requestResource = {
       "id",
       "account",
       "item",
-      "unit_of_measurement",
       "quantity",
       "price",
       "comment",

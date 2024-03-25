@@ -20,11 +20,6 @@ const itemsResource = {
       "contact_person",
       "photo",
     ],
-    parent: {
-      name: "item_group",
-      field: "itemGroupId",
-      displayField: "GroupName",
-    },
 
     actions: {
       new: {

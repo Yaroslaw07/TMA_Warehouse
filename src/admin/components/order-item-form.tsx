@@ -9,7 +9,7 @@ import {
   TextArea,
 } from "@adminjs/design-system";
 import { useNavigate } from "react-router-dom";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { ApiClient, BasePropertyProps, useNotice } from "adminjs";
 import { unit_of_measurement } from "@prisma/client";
 
@@ -19,9 +19,6 @@ const OrderItemForm = ({ record }: BasePropertyProps) => {
   const addNotice = useNotice();
   const api = new ApiClient();
 
-  const [unitOfMeasurement, setUnitOfMeasurement] =
-    useState<unit_of_measurement>();
-
   const quantityRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const commentRef = useRef<HTMLTextAreaElement>(null);
@@ -29,12 +26,6 @@ const OrderItemForm = ({ record }: BasePropertyProps) => {
   const unitsArray = Object.keys(unit_of_measurement).map((key) => {
     return { value: key, label: key };
   });
-
-  useEffect(() => {
-    setUnitOfMeasurement(
-      record?.params.unit_of_measurement as unit_of_measurement
-    );
-  }, [record]);
 
   const handleCancel = () => {
     navigate(-1);
@@ -49,7 +40,6 @@ const OrderItemForm = ({ record }: BasePropertyProps) => {
       quantity: quantity ? parseFloat(quantity) : undefined,
       price: price ? parseFloat(price) : undefined,
       comment,
-      unit_of_measurement: unitOfMeasurement,
       itemId: record?.id,
     };
 
@@ -102,11 +92,12 @@ const OrderItemForm = ({ record }: BasePropertyProps) => {
             Unit Of Measurement
           </Label>
           <Select
-            value={{ value: unitOfMeasurement, label: unitOfMeasurement }}
+            isDisabled={true}
+            value={{
+              label: record?.params.unit_of_measurement,
+              value: record?.params.unit_of_measurement,
+            }}
             id="unit_of_measurement"
-            onChange={(selected) =>
-              setUnitOfMeasurement(selected.value as unit_of_measurement)
-            }
             options={unitsArray}
           ></Select>
         </FormGroup>

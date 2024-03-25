@@ -40,7 +40,6 @@ model request {
   id                  Int                 @id @default(autoincrement())
   employee_id         Int
   item_id             Int
-  unit_of_measurement unit_of_measurement @default(pcs)
   quantity            Decimal             @db.Decimal
   price               Decimal             @db.Decimal(10, 2)
   comment             String?

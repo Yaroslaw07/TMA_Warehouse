@@ -34,7 +34,6 @@ CREATE TABLE request (
   employee_id INTEGER REFERENCES account(id) CONSTRAINT fk_request_employee NOT NULL , 
   item_id INTEGER REFERENCES item(id) CONSTRAINT fk_request_item NOT NULL,
 
-  unit_of_measurement UNIT_OF_MEASUREMENT DEFAULT 'pcs' NOT NULL,
   quantity DECIMAL NOT NULL,
   price DECIMAL(10,2) NOT NULL,
   comment TEXT,
